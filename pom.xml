@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rd4j</groupId>
     <artifactId>super-pom</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
 
     <name>super-pom</name>
@@ -28,9 +28,16 @@
 
     <developers>
         <developer>
+            <id>shaonzhang</id>
             <name>shaon zhang</name>
             <email>shaon.zhang@qq.com</email>
             <url>https://github.com/ShaonZhang</url>
+            <roles>
+                <role>owner</role>
+                <role>developer</role>
+            </roles>
+            <organization>rd4j</organization>
+            <organizationUrl>https://github.com/RD4J</organizationUrl>
         </developer>
     </developers>
 
@@ -46,22 +53,28 @@
     </distributionManagement>
 
     <properties>
-        <!-- 默认JDK -->
+        <!-- 默认的JDK -->
         <java.version>1.8</java.version>
         <!-- 默认项目编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
-        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-        <maven-war-plugin.version>3.0.0</maven-war-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <maven-war-plugin.version>3.3.0</maven-war-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-        <!-- 是否跳过源码编译 -->
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <!-- 是否跳过测试 -->
+        <maven.test.skip>false</maven.test.skip>
+        <!-- 是否跳过源码打包 -->
         <maven.source.skip>false</maven.source.skip>
-        <!-- 是否跳过上传服务器 -->
+        <!-- 是否跳过上传到服务器 -->
         <maven.deploy.skip>false</maven.deploy.skip>
+        <!-- 是否跳过生成文档 -->
+        <maven.javadoc.skip>false</maven.javadoc.skip>
     </properties>
 
     <build>
@@ -100,16 +113,36 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven-jar-plugin.version}</version>
                 </plugin>
-
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven-war-plugin.version}</version>
+                    <configuration>
+                        <!-- 无web.xml不报错 -->
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
                     <version>${maven-install-plugin.version}</version>
                 </plugin>
-
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
@@ -143,15 +176,6 @@
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>${maven-war-plugin.version}</version>
-                    <configuration>
-                        <!-- 无web.xml不报错 -->
-                        <failOnMissingWebXml>false</failOnMissingWebXml>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <artifactId>maven-eclipse-plugin</artifactId>
                     <version>2.9</version>
                     <configuration>
@@ -172,21 +196,8 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.9.1</version>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
-                    <version>1.5</version>
+                    <version>${maven-gpg-plugin.version}</version>
                     <executions>
                         <execution>
                             <id>sign-artifacts</id>
@@ -222,15 +233,15 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
